@@ -1,355 +1,261 @@
 .leaderboard-page {
     min-height: 100vh;
     padding: 3rem 0;
-    background: #f8f9fa;
-    background-image:
-        radial-gradient(at 0% 0%, rgba(74, 158, 255, 0.1) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(74, 158, 255, 0.1) 0px, transparent 50%);
+    background: #f3f4f6;
+    /* Light grey background for the whole page */
+    font-family: 'Inter', sans-serif;
 }
 
 .leaderboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 3rem;
-    padding-bottom: 0;
-    border-bottom: none;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-}
-
-.header-content {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.trophy-icon {
-    font-size: 3.5rem;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    margin-bottom: 2rem;
 }
 
 .leaderboard-header h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 800;
-    margin-bottom: 0.5rem;
-    color: #1a1a1a;
-    background: linear-gradient(135deg, #1a1a1a 0%, #4b5563 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #111827;
+    margin: 0;
 }
 
 .quiz-title {
     color: #6b7280;
-    font-size: 1.125rem;
-    font-weight: 500;
+    margin-top: 0.25rem;
 }
 
+/* Stats Cards (Optional, keeping them clean) */
 .leaderboard-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .stat-box {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    padding: 1.5rem;
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    transition: transform 0.2s;
-}
-
-.stat-box:hover {
-    transform: translateY(-4px);
+    gap: 1rem;
 }
 
 .stat-box svg {
-    font-size: 2rem;
-    color: #4a9eff;
-    padding: 10px;
-    background: rgba(74, 158, 255, 0.1);
-    border-radius: 12px;
-    width: 50px;
-    height: 50px;
+    font-size: 1.5rem;
+    color: #3b82f6;
 }
 
-.stat-box h3 {
-    font-size: 1.75rem;
-    font-weight: 800;
-    margin-bottom: 0.25rem;
-    color: #111827;
-}
-
-.stat-box p {
-    color: #6b7280;
-    font-size: 0.875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.025em;
-}
-
-/* Modern Leaderboard Table */
+/* MAIN TABLE STYLES - Twitter Counter Look */
 .leaderboard-table-container {
     background: white;
-    border-radius: 24px;
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    border: 1px solid rgba(0, 0, 0, 0.03);
-    padding: 1rem;
+    /* Clips the corners */
+    padding: 0;
+    /* Flush with edges */
 }
 
 .leaderboard-table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0 0.5rem;
+    border-collapse: collapse;
+    /* Essential for border-bottom to look like lines */
+    text-align: left;
 }
 
 .leaderboard-table thead th {
-    background: transparent;
-    padding: 1rem 1.5rem;
-    text-align: left;
-    font-weight: 700;
-    color: #9ca3af;
-    font-size: 0.8125rem;
+    background-color: #f9fafb;
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border: none;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-.leaderboard-table tbody tr {
-    transition: transform 0.2s, box-shadow 0.2s;
+.leaderboard-row {
     background: white;
-}
-
-.leaderboard-table tbody tr:hover {
-    transform: scale(1.005);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-    z-index: 10;
-    position: relative;
-    border-radius: 12px;
-}
-
-.leaderboard-table td {
-    padding: 1.25rem 1.5rem;
-    border-top: 1px solid #f3f4f6;
+    transition: background-color 0.2s;
     border-bottom: 1px solid #f3f4f6;
-    background: white;
 }
 
-.leaderboard-table td:first-child {
-    border-top-left-radius: 16px;
-    border-bottom-left-radius: 16px;
-    border-left: 1px solid #f3f4f6;
+.leaderboard-row:last-child {
+    border-bottom: none;
 }
 
-.leaderboard-table td:last-child {
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
-    border-right: 1px solid #f3f4f6;
+.leaderboard-row:hover {
+    background-color: #f9fafb;
 }
 
-/* Rank Styling */
-.rank-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    font-size: 1.125rem;
-    font-weight: 800;
-    border-radius: 50%;
-    color: #6b7280;
-    background: #f3f4f6;
+/* Rank Number */
+.rank-cell {
+    width: 80px;
+    text-align: center;
+    padding: 1rem;
+    vertical-align: middle;
 }
 
-/* Top 3 Highlighting */
-tr.rank-1 td {
-    background: linear-gradient(90deg, #fffbeb 0%, #fff 100%);
-    border-color: #fef3c7;
-}
-
-tr.rank-1 .rank-badge {
-    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
-    color: white;
-    box-shadow: 0 4px 6px rgba(217, 119, 6, 0.3);
+.rank-number {
     font-size: 1.5rem;
+    font-weight: 700;
+    color: #9ca3af;
+    /* Grey color matches reference */
+    display: block;
 }
 
-tr.rank-2 td {
-    background: linear-gradient(90deg, #f8fafc 0%, #fff 100%);
-    border-color: #e2e8f0;
+/* Top 3 Ranks get slightly darker numbers or subtle color if desired */
+.leaderboard-row:nth-child(1) .rank-number {
+    color: #d97706;
+    /* Subtle Gold */
 }
 
-tr.rank-2 .rank-badge {
-    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
-    color: white;
-    box-shadow: 0 4px 6px rgba(100, 116, 139, 0.3);
-    font-size: 1.5rem;
+.leaderboard-row:nth-child(2) .rank-number {
+    color: #94a3b8;
+    /* Subtle Silver */
 }
 
-tr.rank-3 td {
-    background: linear-gradient(90deg, #fff7ed 0%, #fff 100%);
-    border-color: #ffedd5;
-}
-
-tr.rank-3 .rank-badge {
-    background: linear-gradient(135deg, #fdba74 0%, #c2410c 100%);
-    color: white;
-    box-shadow: 0 4px 6px rgba(194, 65, 12, 0.3);
-    font-size: 1.5rem;
+.leaderboard-row:nth-child(3) .rank-number {
+    color: #b45309;
+    /* Subtle Bronze */
 }
 
 /* User Info */
+.user-cell {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
 .user-info {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-.user-name {
-    font-weight: 700;
-    color: #111827;
-    font-size: 1rem;
-    display: block;
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
 }
 
-.user-email {
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
-/* Stats in Table */
-.score-value {
-    font-size: 1.125rem;
-    font-weight: 800;
-    color: #111827;
-}
-
-.percentage-bar {
-    position: relative;
+.user-avatar img {
     width: 100%;
-    max-width: 140px;
-    height: 8px;
-    background: #e5e7eb;
-    border-radius: 99px;
-    overflow: hidden;
-}
-
-.percentage-fill {
     height: 100%;
-    background: linear-gradient(90deg, #4a9eff 0%, #2563eb 100%);
-    border-radius: 99px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-.percentage-text {
-    position: absolute;
-    right: 0;
-    top: -20px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #4a9eff;
-}
-
-/* Correct Count Badge */
-.correct-count {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-    color: #059669;
-    background: #ecfdf5;
-    padding: 0.25rem 0.75rem;
-    border-radius: 99px;
-    font-size: 0.875rem;
-}
-
-.completion-date {
-    color: #9ca3af;
-    font-size: 0.875rem;
-    font-variant-numeric: tabular-nums;
-}
-
-/* Stats cell with bar next to it alignment */
-td:nth-child(4) {
-    /* Percentage column usually */
-    vertical-align: middle;
-}
-
-td .percentage-container {
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #e0f2fe;
+    /* Light blue bg */
+    color: #0ea5e9;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.25rem;
 }
 
-/* Responsive */
+/* Randomize placeholder colors nicely via nth-child logic if CSS allowed functionality, 
+   but simplistic distinct colors is fine */
+.leaderboard-row:nth-child(even) .avatar-placeholder {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.user-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    color: #111827;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.user-handle {
+    color: #3b82f6;
+    /* Blue handle color */
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+/* Stats Columns */
+.stat-cell {
+    padding: 1rem 1.5rem;
+    vertical-align: middle;
+    /* text-align: right; Default for stats often looks better right-aligned, or at least consistent */
+}
+
+.stat-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.stat-value.highlight {
+    color: #111827;
+    font-weight: 700;
+    background: #f3f4f6;
+    padding: 4px 12px;
+    border-radius: 99px;
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
+    .leaderboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
     .leaderboard-table thead {
         display: none;
     }
 
-    .leaderboard-table tr {
+    .leaderboard-row {
         display: flex;
         flex-direction: column;
-        margin-bottom: 1.5rem;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-radius: 12px;
         border: 1px solid #e5e7eb;
-        padding: 1rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
 
-    .leaderboard-table td {
+    .rank-cell {
+        text-align: left;
+        width: 100%;
+        padding: 0 0 1rem 0;
+        border-bottom: 1px solid #f3f4f6;
+        margin-bottom: 1rem;
+    }
+
+    .user-cell,
+    .stat-cell {
+        padding: 0.5rem 0;
+    }
+
+    .stat-cell {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0.75rem 0;
-        border: none !important;
-        background: transparent !important;
     }
 
-    .leaderboard-table td::before {
+    .stat-cell::before {
         content: attr(data-label);
+        /* Won't show unless I add data-label to td in JSX, ignoring for now or just keeping simple */
         font-weight: 600;
         color: #6b7280;
         font-size: 0.875rem;
-        text-transform: uppercase;
-    }
-
-    tr.rank-1,
-    tr.rank-2,
-    tr.rank-3 {
-        padding: 1.5rem;
-        /* More padding for highlighted cards */
-    }
-
-    /* Keep top rank backgrounds */
-    tr.rank-1 {
-        background: linear-gradient(135deg, #fffbeb 0%, #fff 100%) !important;
-        border: 1px solid #fcd34d !important;
-    }
-
-    tr.rank-2 {
-        background: linear-gradient(135deg, #f8fafc 0%, #fff 100%) !important;
-        border: 1px solid #cbd5e1 !important;
-    }
-
-    tr.rank-3 {
-        background: linear-gradient(135deg, #fff7ed 0%, #fff 100%) !important;
-        border: 1px solid #fdba74 !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .leaderboard-header h1 {
-        font-size: 2rem;
-    }
-
-    .stat-box h3 {
-        font-size: 1.5rem;
     }
 }

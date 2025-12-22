@@ -92,34 +92,35 @@ const GlobalLeaderboard = () => {
                             </thead>
                             <tbody>
                                 {leaderboardData.map((entry, index) => (
-                                    <tr key={index} className={`rank-${entry.rank <= 3 ? entry.rank : 'other'}`}>
-                                        <td>
-                                            <span className="rank-badge">{getRankBadge(entry.rank)}</span>
+                                    <tr key={index} className="leaderboard-row">
+                                        <td className="rank-cell">
+                                            <span className="rank-number">{entry.rank}</span>
                                         </td>
-                                        <td>
+                                        <td className="user-cell">
                                             <div className="user-info">
-                                                <div className="user-details">
+                                                <div className="user-avatar">
+                                                    {entry.avatar ? (
+                                                        <img src={entry.avatar} alt={entry.name} />
+                                                    ) : (
+                                                        <div className="avatar-placeholder">
+                                                            {entry.name.charAt(0).toUpperCase()}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="user-text">
                                                     <span className="user-name">{entry.name}</span>
-                                                    <span className="user-email">{entry.email}</span>
+                                                    <span className="user-handle">@{entry.name.replace(/\s+/g, '').toLowerCase()}</span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>
-                                            <div className="correct-count">
-                                                <FiCheckCircle /> {entry.totalQuizzes}
-                                            </div>
+                                        <td className="stat-cell" data-label="Quizzes Taken">
+                                            <span className="stat-value">{entry.totalQuizzes}</span>
                                         </td>
-                                        <td>
-                                            <div className="percentage-bar">
-                                                <div
-                                                    className="percentage-fill"
-                                                    style={{ width: `${entry.averagePercentage}%` }}
-                                                ></div>
-                                                <span className="percentage-text">{entry.averagePercentage}%</span>
-                                            </div>
+                                        <td className="stat-cell" data-label="Avg. Score">
+                                            <div className="stat-value">{Math.round(entry.averagePercentage)}%</div>
                                         </td>
-                                        <td>
-                                            <span className="score-value">{entry.totalScore}</span>
+                                        <td className="stat-cell" data-label="Total Score">
+                                            <span className="stat-value highlight">{entry.totalScore}</span>
                                         </td>
                                     </tr>
                                 ))}
