@@ -1,0 +1,119 @@
+{
+    "title": "JavaScript Fundamentals Quiz",
+    "description": "Test your knowledge of JavaScript basics",
+    "category": "Programming",
+    "difficulty": "medium",
+    "timeLimit": 20,
+    "questions": [
+        {
+            "question": "What is the correct syntax for referring to an external script called 'app.js'?",
+            "options": [
+                "<script href='app.js'>",
+                "<script name='app.js'>",
+                "<script src='app.js'>",
+                "<script file='app.js'>"
+            ],
+            "correctAnswer": 2,
+            "explanation": "The 'src' attribute is used to specify the path to an external JavaScript file."
+        },
+        {
+            "question": "How do you write 'Hello World' in an alert box?",
+            "options": [
+                "msgBox('Hello World');",
+                "alertBox('Hello World');",
+                "msg('Hello World');",
+                "alert('Hello World');"
+            ],
+            "correctAnswer": 3,
+            "explanation": "The alert() function is used to display an alert box with a message."
+        },
+        {
+            "question": "How do you create a function in JavaScript?",
+            "options": [
+                "function myFunction()",
+                "function:myFunction()",
+                "function = myFunction()",
+                "create myFunction()"
+            ],
+            "correctAnswer": 0,
+            "explanation": "Functions in JavaScript are declared using the 'function' keyword followed by the function name and parentheses."
+        },
+        {
+            "question": "How do you call a function named 'myFunction'?",
+            "options": [
+                "call myFunction()",
+                "call function myFunction()",
+                "myFunction()",
+                "execute myFunction()"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Functions are called by writing the function name followed by parentheses."
+        },
+        {
+            "question": "How to write an IF statement in JavaScript?",
+            "options": [
+                "if i = 5 then",
+                "if i == 5 then",
+                "if (i == 5)",
+                "if i = 5"
+            ],
+            "correctAnswer": 2,
+            "explanation": "IF statements in JavaScript use the syntax: if (condition) { code }"
+        },
+        {
+            "question": "Which operator is used to assign a value to a variable?",
+            "options": [
+                "*",
+                "-",
+                "=",
+                "x"
+            ],
+            "correctAnswer": 2,
+            "explanation": "The = operator is used for assignment in JavaScript."
+        },
+        {
+            "question": "What will the following code return: Boolean(10 > 9)?",
+            "options": [
+                "false",
+                "true",
+                "NaN",
+                "undefined"
+            ],
+            "correctAnswer": 1,
+            "explanation": "10 is greater than 9, so the expression evaluates to true."
+        },
+        {
+            "question": "Is JavaScript case-sensitive?",
+            "options": [
+                "No",
+                "Yes",
+                "Sometimes",
+                "Only for variables"
+            ],
+            "correctAnswer": 1,
+            "explanation": "JavaScript is case-sensitive. Variables named 'myVar' and 'myvar' are different."
+        },
+        {
+            "question": "Which method is used to remove the last element from an array?",
+            "options": [
+                "pop()",
+                "push()",
+                "shift()",
+                "unshift()"
+            ],
+            "correctAnswer": 0,
+            "explanation": "The pop() method removes and returns the last element of an array."
+        },
+        {
+            "question": "What is the correct way to write a JavaScript array?",
+            "options": [
+                "var colors = (1:'red', 2:'green', 3:'blue')",
+                "var colors = 'red', 'green', 'blue'",
+                "var colors = ['red', 'green', 'blue']",
+                "var colors = 1 = ('red'), 2 = ('green'), 3 = ('blue')"
+            ],
+            "correctAnswer": 2,
+            "explanation": "Arrays in JavaScript are created using square brackets with comma-separated values."
+        }
+    ]
+}

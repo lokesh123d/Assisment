@@ -1,0 +1,89 @@
+{
+    "title": "Mixed Question Types Quiz",
+    "description": "Quiz with MCQ and Written questions",
+    "category": "General",
+    "difficulty": "medium",
+    "timeLimit": 30,
+    "questions": [
+        {
+            "type": "mcq",
+            "question": "What is the capital of India?",
+            "options": [
+                "Mumbai",
+                "Delhi",
+                "Kolkata",
+                "Chennai"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Delhi is the capital of India",
+            "points": 1
+        },
+        {
+            "type": "written",
+            "question": "Explain the importance of education in 50-100 words.",
+            "sampleAnswer": "Education is the foundation of personal and societal development. It empowers individuals with knowledge, skills, and critical thinking abilities. Education opens doors to opportunities, reduces poverty, and promotes equality. It helps in building a better society by creating informed citizens who can contribute positively to their communities.",
+            "keywords": [
+                "knowledge",
+                "development",
+                "skills",
+                "opportunities",
+                "society"
+            ],
+            "maxWords": 100,
+            "explanation": "A good answer should discuss knowledge, skills, opportunities, and societal benefits",
+            "points": 5
+        },
+        {
+            "type": "mcq",
+            "question": "Which planet is known as the Red Planet?",
+            "options": [
+                "Venus",
+                "Mars",
+                "Jupiter",
+                "Saturn"
+            ],
+            "correctAnswer": 1,
+            "explanation": "Mars is known as the Red Planet due to iron oxide on its surface",
+            "points": 1
+        },
+        {
+            "type": "short-answer",
+            "question": "What is the full form of HTML?",
+            "sampleAnswer": "HyperText Markup Language",
+            "keywords": [
+                "hypertext",
+                "markup",
+                "language"
+            ],
+            "maxWords": 10,
+            "explanation": "HTML stands for HyperText Markup Language",
+            "points": 2
+        },
+        {
+            "type": "true-false",
+            "question": "The Earth revolves around the Sun.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "correctAnswer": 0,
+            "explanation": "The Earth revolves around the Sun in an elliptical orbit",
+            "points": 1
+        },
+        {
+            "type": "written",
+            "question": "Describe your favorite book and why you like it. (100 words)",
+            "sampleAnswer": "Student's personal answer - should include book name, author, plot summary, and reasons for liking it",
+            "keywords": [
+                "book",
+                "author",
+                "story",
+                "characters",
+                "why"
+            ],
+            "maxWords": 100,
+            "explanation": "This is a subjective question. Look for well-structured response with book details and personal reasoning.",
+            "points": 5
+        }
+    ]
+}

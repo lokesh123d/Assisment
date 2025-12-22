@@ -1,0 +1,296 @@
+{
+    "title": "Complete Question Types Demo Quiz",
+    "description": "Covers all 14 question types with examples",
+    "category": "Programming",
+    "difficulty": "medium",
+    "timeLimit": 60,
+    "questions": [
+        {
+            "type": "mcq",
+            "question": "What is the output of: console.log(typeof null)?",
+            "options": [
+                "null",
+                "undefined",
+                "object",
+                "number"
+            ],
+            "correctAnswer": 2,
+            "explanation": "typeof null returns 'object', which is a known JavaScript quirk",
+            "points": 1,
+            "difficulty": "easy",
+            "tags": [
+                "javascript",
+                "basics"
+            ]
+        },
+        {
+            "type": "multiple-select",
+            "question": "Which of the following are JavaScript frameworks? (Select all that apply)",
+            "options": [
+                "React",
+                "Angular",
+                "Vue",
+                "Python",
+                "Django"
+            ],
+            "correctAnswer": [
+                0,
+                1,
+                2
+            ],
+            "explanation": "React, Angular, and Vue are JavaScript frameworks. Python is a language and Django is a Python framework",
+            "points": 2,
+            "difficulty": "easy"
+        },
+        {
+            "type": "true-false",
+            "question": "JavaScript is a statically typed language.",
+            "options": [
+                "True",
+                "False"
+            ],
+            "correctAnswer": 1,
+            "explanation": "JavaScript is dynamically typed, not statically typed",
+            "points": 1,
+            "difficulty": "easy"
+        },
+        {
+            "type": "short-answer",
+            "question": "What does HTML stand for?",
+            "sampleAnswer": "HyperText Markup Language",
+            "keywords": [
+                "hypertext",
+                "markup",
+                "language"
+            ],
+            "maxWords": 5,
+            "explanation": "HTML stands for HyperText Markup Language",
+            "points": 2,
+            "difficulty": "easy"
+        },
+        {
+            "type": "long-answer",
+            "question": "Explain the difference between var, let, and const in JavaScript. Provide examples.",
+            "sampleAnswer": "var has function scope and is hoisted. let has block scope and cannot be redeclared in the same scope. const also has block scope but cannot be reassigned. Example: var can be used anywhere in function, let only in its block, const value cannot change.",
+            "keywords": [
+                "scope",
+                "hoisting",
+                "block",
+                "function",
+                "reassign"
+            ],
+            "minWords": 30,
+            "maxWords": 150,
+            "explanation": "Understanding variable declarations is fundamental in JavaScript",
+            "points": 5,
+            "difficulty": "medium",
+            "hints": [
+                "Think about scope",
+                "Consider hoisting behavior"
+            ]
+        },
+        {
+            "type": "fill-blank",
+            "question": "The ___ keyword is used to declare a constant in JavaScript, and ___ is used for block-scoped variables.",
+            "blanks": [
+                {
+                    "position": 0,
+                    "correctAnswer": "const",
+                    "alternateAnswers": [
+                        "CONST"
+                    ]
+                },
+                {
+                    "position": 1,
+                    "correctAnswer": "let",
+                    "alternateAnswers": [
+                        "LET"
+                    ]
+                }
+            ],
+            "explanation": "const declares constants, let declares block-scoped variables",
+            "points": 2,
+            "difficulty": "easy"
+        },
+        {
+            "type": "matching",
+            "question": "Match the HTTP method with its purpose:",
+            "leftItems": [
+                "GET",
+                "POST",
+                "PUT",
+                "DELETE"
+            ],
+            "rightItems": [
+                "Remove resource",
+                "Retrieve resource",
+                "Update resource",
+                "Create resource"
+            ],
+            "correctPairs": [
+                {
+                    "left": 0,
+                    "right": 1
+                },
+                {
+                    "left": 1,
+                    "right": 3
+                },
+                {
+                    "left": 2,
+                    "right": 2
+                },
+                {
+                    "left": 3,
+                    "right": 0
+                }
+            ],
+            "explanation": "GET retrieves, POST creates, PUT updates, DELETE removes",
+            "points": 4,
+            "difficulty": "medium"
+        },
+        {
+            "type": "ordering",
+            "question": "Arrange the following steps in the correct order for the Software Development Life Cycle:",
+            "items": [
+                "Testing",
+                "Requirements Gathering",
+                "Design",
+                "Implementation",
+                "Deployment",
+                "Maintenance"
+            ],
+            "correctOrder": [
+                1,
+                2,
+                3,
+                0,
+                4,
+                5
+            ],
+            "explanation": "SDLC: Requirements → Design → Implementation → Testing → Deployment → Maintenance",
+            "points": 3,
+            "difficulty": "medium"
+        },
+        {
+            "type": "code-output",
+            "question": "What will be the output of the following code?",
+            "codeSnippet": "let x = 10;\nlet y = '10';\nconsole.log(x == y);\nconsole.log(x === y);",
+            "language": "javascript",
+            "options": [
+                "true, true",
+                "true, false",
+                "false, true",
+                "false, false"
+            ],
+            "correctAnswer": 1,
+            "explanation": "== does type coercion (true), === checks type and value (false)",
+            "points": 2,
+            "difficulty": "medium",
+            "tags": [
+                "javascript",
+                "operators",
+                "comparison"
+            ]
+        },
+        {
+            "type": "code-debug",
+            "question": "Find and fix the error in this code:",
+            "codeSnippet": "function greet(name) {\n  console.log('Hello, ' + nmae);\n}\ngreet('Alice');",
+            "language": "javascript",
+            "sampleAnswer": "Change 'nmae' to 'name' on line 2",
+            "keywords": [
+                "nmae",
+                "name",
+                "typo",
+                "spelling"
+            ],
+            "explanation": "There's a typo: 'nmae' should be 'name'",
+            "points": 3,
+            "difficulty": "easy",
+            "hints": [
+                "Check variable names carefully"
+            ]
+        },
+        {
+            "type": "code-complete",
+            "question": "Complete the function to reverse a string:",
+            "codeSnippet": "function reverseString(str) {\n  // Complete this function\n  return ___________;\n}",
+            "language": "javascript",
+            "sampleAnswer": "return str.split('').reverse().join('');",
+            "keywords": [
+                "split",
+                "reverse",
+                "join",
+                "array"
+            ],
+            "testCases": [
+                {
+                    "input": "hello",
+                    "expectedOutput": "olleh"
+                },
+                {
+                    "input": "world",
+                    "expectedOutput": "dlrow"
+                }
+            ],
+            "explanation": "Split string to array, reverse array, join back to string",
+            "points": 4,
+            "difficulty": "medium"
+        },
+        {
+            "type": "code-write",
+            "question": "Write a function that takes an array of numbers and returns the sum of all even numbers.",
+            "language": "javascript",
+            "sampleAnswer": "function sumEvenNumbers(arr) {\n  return arr.filter(num => num % 2 === 0).reduce((sum, num) => sum + num, 0);\n}",
+            "keywords": [
+                "filter",
+                "reduce",
+                "even",
+                "modulo",
+                "sum"
+            ],
+            "testCases": [
+                {
+                    "input": "[1, 2, 3, 4, 5, 6]",
+                    "expectedOutput": "12"
+                },
+                {
+                    "input": "[10, 15, 20, 25]",
+                    "expectedOutput": "30"
+                }
+            ],
+            "explanation": "Filter even numbers then use reduce to sum them",
+            "points": 5,
+            "difficulty": "medium",
+            "hints": [
+                "Use filter() and reduce()",
+                "Check if number % 2 === 0"
+            ]
+        },
+        {
+            "type": "numerical",
+            "question": "If a function has time complexity O(n²) and processes 100 items, approximately how many operations will it perform?",
+            "correctAnswer": 10000,
+            "explanation": "O(n²) means n * n operations, so 100 * 100 = 10,000",
+            "points": 2,
+            "difficulty": "medium",
+            "tags": [
+                "algorithms",
+                "complexity"
+            ]
+        },
+        {
+            "type": "file-upload",
+            "question": "Upload your JavaScript code file for the calculator assignment",
+            "sampleAnswer": "Student should upload a .js file containing calculator implementation",
+            "explanation": "Code will be manually reviewed for functionality and best practices",
+            "points": 10,
+            "difficulty": "hard",
+            "tags": [
+                "assignment",
+                "practical"
+            ]
+        }
+    ]
+}
