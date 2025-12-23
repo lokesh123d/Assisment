@@ -36,7 +36,7 @@ const Login = () => {
                     {/* Fallback text if logo doesn't load immediately or to match style if transparent bg looks better with dark text */}
                 </div>
 
-                <h1 className="login-title">Campus Learning<br />Dashboard</h1>
+                <h1 className="login-title">Assessment<br />Dharamshala</h1>
                 <p className="login-subtitle">Sign in to access your learning journey</p>
 
                 <div className="info-card">
