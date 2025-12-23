@@ -66,43 +66,35 @@ const Dashboard = () => {
                 {/* Stats Cards */}
                 <div className="stats-grid">
                     <div className="stat-card-large fade-in">
-                        <div className="stat-icon-wrapper">
-                            <FiAward className="stat-icon" />
-                        </div>
-                        <div className="stat-info">
+                        <div className="stat-info-text">
                             <h3>Total Quizzes</h3>
                             <p className="stat-value">{stats?.totalQuizzes || 0}</p>
                         </div>
+                        <div className="stat-indicator indicator-blue"></div>
                     </div>
 
                     <div className="stat-card-large fade-in" style={{ animationDelay: '0.1s' }}>
-                        <div className="stat-icon-wrapper">
-                            <FiTarget className="stat-icon" />
-                        </div>
-                        <div className="stat-info">
+                        <div className="stat-info-text">
                             <h3>Average Score</h3>
                             <p className="stat-value">{stats?.averagePercentage || 0}%</p>
                         </div>
+                        <div className="stat-indicator indicator-green"></div>
                     </div>
 
                     <div className="stat-card-large fade-in" style={{ animationDelay: '0.2s' }}>
-                        <div className="stat-icon-wrapper">
-                            <FiTrendingUp className="stat-icon" />
-                        </div>
-                        <div className="stat-info">
+                        <div className="stat-info-text">
                             <h3>Questions Answered</h3>
                             <p className="stat-value">{stats?.totalQuestions || 0}</p>
                         </div>
+                        <div className="stat-indicator indicator-orange"></div>
                     </div>
 
                     <div className="stat-card-large fade-in" style={{ animationDelay: '0.3s' }}>
-                        <div className="stat-icon-wrapper">
-                            <FiClock className="stat-icon" />
-                        </div>
-                        <div className="stat-info">
+                        <div className="stat-info-text">
                             <h3>Correct Answers</h3>
                             <p className="stat-value">{stats?.totalScore || 0}</p>
                         </div>
+                        <div className="stat-indicator indicator-purple"></div>
                     </div>
                 </div>
 
