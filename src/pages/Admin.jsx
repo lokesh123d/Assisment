@@ -272,6 +272,35 @@ const Admin = () => {
                     { "input": "10, 20", "expectedOutput": "30" }
                 ]
             }];
+        } else if (type === 'mixed') {
+            questions = [
+                {
+                    "type": "mcq",
+                    "question": "Which of the following is a valid variable name in JavaScript?",
+                    "options": ["2names", "_first_name", "var-name", "@name"],
+                    "correctAnswer": 1,
+                    "marks": 2
+                },
+                {
+                    "type": "long-answer",
+                    "question": "Explain the difference between 'let' and 'var' in one sentence.",
+                    "maxWords": 50,
+                    "marks": 5
+                },
+                {
+                    "type": "code-output",
+                    "question": "What will be the output?",
+                    "codeSnippet": "console.log(typeof NaN);",
+                    "correctAnswer": "number",
+                    "marks": 3
+                },
+                {
+                    "type": "code-write",
+                    "question": "Write a function 'sum' that adds two numbers.",
+                    "language": "javascript",
+                    "marks": 10
+                }
+            ];
         }
 
         return JSON.stringify({ ...base, questions }, null, 2);
@@ -517,6 +546,7 @@ const Admin = () => {
                                             <option value="long-answer">Written Test (Essay/Subjective)</option>
                                             <option value="code-output">Output Based (Predict Output)</option>
                                             <option value="code-write">Code Written Test (Programming)</option>
+                                            <option value="mixed">Mixed / Bulk Upload (All Types)</option>
                                         </select>
                                     </div>
 

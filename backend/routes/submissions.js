@@ -27,13 +27,16 @@ router.get('/', protect, admin, async (req, res) => {
 });
 
 /**
- * @route   GET /api/submissions/download/:filename
+ * @route   GET /api/submissions/download
  * @desc    Download PDF report (Admin only)
  * @access  Private/Admin
  */
-router.get('/download/:filename', protect, admin, (req, res) => {
+router.get('/download', protect, admin, (req, res) => {
     try {
-        const filename = req.params.filename;
+        const filename = req.query.file; // Use query param
+        if (!filename) {
+            return res.status(400).json({ message: 'Filename is required' });
+        }
         const filepath = path.join(process.cwd(), 'reports', filename);
 
         // Check if file exists
@@ -43,7 +46,7 @@ router.get('/download/:filename', protect, admin, (req, res) => {
 
         // Set headers
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+        res.setHeader('Content-Disposition', `attachment; filename="${path.basename(filename)}"`);
 
         // Stream file
         const fileStream = fs.createReadStream(filepath);
@@ -55,13 +58,16 @@ router.get('/download/:filename', protect, admin, (req, res) => {
 });
 
 /**
- * @route   GET /api/submissions/view/:filename
+ * @route   GET /api/submissions/view
  * @desc    View PDF report in browser (Admin only)
  * @access  Private/Admin
  */
-router.get('/view/:filename', protect, admin, (req, res) => {
+router.get('/view', protect, admin, (req, res) => {
     try {
-        const filename = req.params.filename;
+        const filename = req.query.file; // Use query param
+        if (!filename) {
+            return res.status(400).json({ message: 'Filename is required' });
+        }
         const filepath = path.join(process.cwd(), 'reports', filename);
 
         // Check if file exists
@@ -71,7 +77,7 @@ router.get('/view/:filename', protect, admin, (req, res) => {
 
         // Set headers for viewing in browser
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+        res.setHeader('Content-Disposition', `inline; filename="${path.basename(filename)}"`);
 
         // Stream file
         const fileStream = fs.createReadStream(filepath);
