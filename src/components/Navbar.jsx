@@ -69,11 +69,11 @@ const Navbar = () => {
                             <FiBarChart2 /> Dashboard
                         </Link>
 
-                        {/* {user && (
+                        {user && (
                             <button onClick={() => { logout(); closeMenu(); }} className="nav-link btn-logout-mobile">
                                 <FiLogOut /> Logout
                             </button>
-                        )} */}
+                        )}
                     </div>
 
                     <div className="navbar-user desktop-only">
