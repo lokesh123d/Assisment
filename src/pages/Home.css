@@ -277,6 +277,19 @@
     .quick-features-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
+    /* Force center alignment on smaller screens for Hero */
+    .hero-content {
+        margin: 0 auto 3rem auto;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-actions {
+        justify-content: center;
+    }
 }
 
 @media (max-width: 768px) {
