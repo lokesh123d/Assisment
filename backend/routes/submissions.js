@@ -1,6 +1,6 @@
 import express from 'express';
 import { protect, admin } from '../middleware/auth.js';
-import { streamQuizReport } from '../utils/pdfGenerator.js';
+import { generateQuizReportBuffer } from '../utils/pdfGenerator.js';
 import User from '../models/User.js';
 import Quiz from '../models/Quiz.js';
 
@@ -79,7 +79,6 @@ const handleReportRequest = async (req, res, disposition) => {
         }
 
         // Fetch Quiz Data to reconstruct report (Questions text, Correct Answers)
-        // Check if quizId exists (it might be null if populated failed above, but here we use raw ID)
         let quiz = null;
         if (submission.quizId) {
             quiz = await Quiz.findById(submission.quizId);
@@ -104,7 +103,7 @@ const handleReportRequest = async (req, res, disposition) => {
             }
 
             return {
-                question: questionText,
+                question: questionText || 'Question Text Missing',
                 selectedAnswer: ans.selectedAnswer,
                 correctAnswer: correctAnswer,
                 isCorrect: ans.isCorrect,
@@ -123,28 +122,32 @@ const handleReportRequest = async (req, res, disposition) => {
                 timeLimit: quiz ? quiz.timeLimit : 0
             },
             result: {
-                score: submission.score,
-                totalQuestions: submission.totalQuestions,
-                percentage: submission.percentage,
+                score: submission.score || 0,
+                totalQuestions: submission.totalQuestions || 0,
+                percentage: submission.percentage || 0,
                 passed: submission.percentage >= 60,
                 detailedAnswers
             },
-            submittedAt: submission.completedAt
+            submittedAt: submission.completedAt || new Date()
         };
+
+        // Generate Buffer FIRST (Catches errors before sending headers)
+        const pdfBuffer = await generateQuizReportBuffer(submissionData);
 
         // Set Headers
         const filename = `${user.name.replace(/[^a-z0-9]/gi, '_')}-Report.pdf`;
         res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Length', pdfBuffer.length); // Explicit length helps browser
         res.setHeader('Content-Disposition', `${disposition}; filename="${filename}"`);
 
-        // Generate and Stream
-        streamQuizReport(res, submissionData);
+        // Send Buffer
+        res.send(pdfBuffer);
 
     } catch (error) {
         console.error('Report generation error:', error);
-        // If headers not sent, send JSON error. If partly sent, stream will die.
+        // If headers not sent, send JSON error.
         if (!res.headersSent) {
-            res.status(500).json({ message: 'Server error', error: error.message });
+            res.status(500).json({ message: 'Server error generating PDF', error: error.message });
         }
     }
 };

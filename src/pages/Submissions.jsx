@@ -45,6 +45,13 @@ const Submissions = () => {
                 responseType: 'blob'
             });
 
+            // Check if response is JSON (Error)
+            if (response.data.type === 'application/json') {
+                const text = await response.data.text();
+                const json = JSON.parse(text);
+                throw new Error(json.message || 'Download failed');
+            }
+
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -54,7 +61,7 @@ const Submissions = () => {
             link.remove();
         } catch (error) {
             console.error('Error downloading report:', error);
-            setMessage({ type: 'error', text: 'Failed to download report' });
+            setMessage({ type: 'error', text: error.message || 'Failed to download report' });
         }
     };
 
@@ -65,12 +72,25 @@ const Submissions = () => {
                 responseType: 'blob'
             });
 
+            // Check if response is JSON (Error)
+            if (response.data.type === 'application/json') {
+                const text = await response.data.text();
+                const json = JSON.parse(text);
+                throw new Error(json.message || 'View failed');
+            }
+
             const file = new Blob([response.data], { type: 'application/pdf' });
+
+            // Validate Blob size
+            if (file.size < 100) {
+                throw new Error('Generated PDF is empty or invalid.');
+            }
+
             const fileURL = URL.createObjectURL(file);
             window.open(fileURL, '_blank');
         } catch (error) {
             console.error('Error viewing report:', error);
-            setMessage({ type: 'error', text: 'Failed to view report' });
+            setMessage({ type: 'error', text: error.message || 'Failed to view report' });
         }
     };
 

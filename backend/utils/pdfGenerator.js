@@ -1,6 +1,6 @@
 import PDFDocument from 'pdfkit';
-import fs from 'fs';
 import path from 'path';
+import fs from 'fs';
 import os from 'os';
 
 /**
@@ -9,6 +9,9 @@ import os from 'os';
  */
 const generatePDFContent = (doc, submissionData) => {
     const { user, quiz, result, submittedAt } = submissionData;
+
+    // Helper to safe string
+    const safeStr = (str) => (str === null || str === undefined) ? '' : String(str);
 
     // --- Header ---
     doc.fillColor('#4a9eff') // Blue header for verification
@@ -25,9 +28,9 @@ const generatePDFContent = (doc, submissionData) => {
         .lineTo(550, 90)
         .stroke();
 
-    doc.fontSize(14).text(`Subject: ${quiz.title}`, 50, 100);
+    doc.fontSize(14).text(`Subject: ${safeStr(quiz.title)}`, 50, 100);
     doc.fontSize(10)
-        .text(`Student: ${user.name} (${user.email})`, 50, 120)
+        .text(`Student: ${safeStr(user.name)} (${safeStr(user.email)})`, 50, 120)
         .text(`Date: ${new Date(submittedAt).toLocaleString()}`, 50, 135)
         .text(`Duration: ${quiz.timeLimit || 'N/A'} mins`, 50, 150)
         .moveDown();
@@ -66,13 +69,13 @@ const generatePDFContent = (doc, submissionData) => {
 
         // Question Title
         doc.fontSize(11).font('Helvetica-Bold').fillColor('#000000');
-        doc.text(`Q${questionNum}: ${ans.question}`, { width: 500 });
+        doc.text(`Q${questionNum}: ${safeStr(ans.question)}`, { width: 500 });
         doc.moveDown(0.5);
 
         // User Answer
         doc.fontSize(10).font('Helvetica').fillColor(isCorrect ? '#2b8a3e' : '#c92a2a');
 
-        let answerText = String(ans.selectedAnswer || 'No Answer');
+        let answerText = safeStr(ans.selectedAnswer || 'No Answer');
         if (answerText.length > 2000) answerText = answerText.substring(0, 2000) + '... (truncated)';
 
         doc.text(`Your Answer: ${answerText}`, { width: 480 });
@@ -80,12 +83,12 @@ const generatePDFContent = (doc, submissionData) => {
         // Correct Answer
         if (!isCorrect) {
             doc.fillColor('#555555');
-            doc.text(`Correct Answer: ${ans.correctAnswer}`, { width: 480 });
+            doc.text(`Correct Answer: ${safeStr(ans.correctAnswer)}`, { width: 480 });
         }
 
         // Marks / Type
         doc.fillColor('#888888').fontSize(9);
-        doc.text(`Type: ${ans.type || 'MCQ'}`, { width: 480 });
+        doc.text(`Type: ${safeStr(ans.type || 'MCQ')}`, { width: 480 });
 
         doc.moveDown();
         doc.strokeColor('#eeeeee').lineWidth(1).moveTo(50, doc.y).lineTo(550, doc.y).stroke();
@@ -94,80 +97,61 @@ const generatePDFContent = (doc, submissionData) => {
 };
 
 /**
- * Generate PDF Report and stream to response (For Web View/Download)
+ * Generate PDF Report and return as Buffer (Safe for Vercel/Async)
  */
-export const streamQuizReport = (res, submissionData) => {
-    try {
-        const doc = new PDFDocument({ margin: 50 });
-
-        // Pipe directly to response
-        doc.pipe(res);
-
-        generatePDFContent(doc, submissionData);
-
-        doc.end();
-    } catch (error) {
-        console.error('PDF Stream Error:', error);
-        if (!res.headersSent) {
-            res.status(500).send('Error generating PDF');
-        }
-    }
-};
-
-/**
- * Generate PDF report for quiz submission (File based - Legacy/Background)
- */
-export const generateQuizReportPDF = async (submissionData) => {
-    const { user, quiz, submittedAt } = submissionData;
-
-    // Use system temp directory for cloud compatibility (Vercel/Render)
-    const reportsBaseDir = path.join(os.tmpdir(), 'quiz_reports');
-    const sanitizedTitle = (quiz.title || 'Untitled_Quiz').replace(/[^a-z0-9]/gi, '_').substring(0, 50);
-    const reportsDir = path.join(reportsBaseDir, sanitizedTitle);
-
-    if (!fs.existsSync(reportsDir)) {
-        fs.mkdirSync(reportsDir, { recursive: true });
-    }
-
-    const timestamp = new Date().getTime();
-    const sanitizedUser = (user.name || 'User').replace(/[^a-z0-9]/gi, '_');
-    const filename = `${sanitizedUser}-${timestamp}.pdf`;
-    const filepath = path.join(reportsDir, filename);
-
+export const generateQuizReportBuffer = async (submissionData) => {
     return new Promise((resolve, reject) => {
         try {
             const doc = new PDFDocument({ margin: 50 });
-            const stream = fs.createWriteStream(filepath);
+            const buffers = [];
 
-            doc.pipe(stream);
+            doc.on('data', buffers.push.bind(buffers));
+            doc.on('end', () => {
+                const pdfData = Buffer.concat(buffers);
+                resolve(pdfData);
+            });
+            doc.on('error', (err) => {
+                reject(err);
+            });
+
             generatePDFContent(doc, submissionData);
+
             doc.end();
-
-            stream.on('finish', () => {
-                resolve({
-                    filename,
-                    filepath,
-                    folder: sanitizedTitle,
-                    path: path.join(sanitizedTitle, filename)
-                });
-            });
-
-            stream.on('error', (error) => {
-                reject(error);
-            });
-
         } catch (error) {
             reject(error);
         }
     });
 };
 
-// Legacy support (safe to remove imports if unused elsewhere, but keeping for compatibility)
-export const getReportsList = () => {
-    // This function is deprecated in favor of DB-based listing 
-    // but kept empty/minimal to prevent crash if called
-    return [];
+/**
+ * Generate PDF Report and stream to response (Kept for compatibility)
+ */
+export const streamQuizReport = (res, submissionData) => {
+    // Redirect to buffer logic to ensure safety even here
+    generateQuizReportBuffer(submissionData)
+        .then(buffer => {
+            res.write(buffer);
+            res.end();
+        })
+        .catch(err => {
+            console.error('PDF Buffer Error:', err);
+            if (!res.headersSent) res.status(500).send('Error generating PDF');
+        });
 };
 
-export const cleanOldReports = () => { };
+/**
+ * Legacy Support - Not used primarily anymore
+ */
+export const generateQuizReportPDF = async (submissionData) => {
+    // If saving file is still needed for some internal logic (unlikely)
+    // We mock it or implement it using buffer
+    return generateQuizReportBuffer(submissionData).then(buffer => {
+        return {
+            filename: 'report.pdf',
+            buffer: buffer
+        };
+    });
+};
 
+export const getReportsList = () => [];
+export const cleanOldReports = () => { };
