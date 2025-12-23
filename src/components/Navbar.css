@@ -7,6 +7,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* Default Flex layout for safety on smaller screens */
 .navbar-content {
     display: flex;
     align-items: center;
@@ -14,7 +15,15 @@
     padding: 0.75rem 1rem;
     max-width: 1400px;
     margin: 0 auto;
-    gap: 2rem;
+    gap: 1rem;
+}
+
+/* Intelligent Grid layout for Desktop (> 1150px) to ensure perfect centering */
+@media (min-width: 1150px) {
+    .navbar-content {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+    }
 }
 
 .navbar-brand {
@@ -25,6 +34,7 @@
     color: #212529;
     font-size: 1.5rem;
     font-weight: 800;
+    white-space: nowrap;
     white-space: nowrap;
     flex-shrink: 0;
     z-index: 1100;
@@ -54,10 +64,16 @@
 .navbar-menu {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    flex: 1;
+    gap: 0.25rem;
+    /* Tighter gap to prevent wrapping */
     justify-content: center;
+    /* Grid alignment for desktop */
+    justify-self: center;
+    width: 100%;
 }
+
+/* Absolute centering for desktop to ensure perfectly centered links */
+/* Removed absolute positioning media query as Grid handles it better */
 
 .nav-link {
     display: flex;
@@ -93,6 +109,9 @@
     align-items: center;
     gap: 0.75rem;
     flex-shrink: 0;
+    justify-content: flex-end;
+    /* Grid alignment for desktop */
+    justify-self: end;
 }
 
 .user-info {
@@ -157,6 +176,11 @@
     display: none;
 }
 
+.btn-logout-mobile {
+    display: none;
+    /* Hidden by default on desktop */
+}
+
 .user-profile-header {
     display: none;
 }
@@ -195,8 +219,12 @@
         pointer-events: none;
     }
 
+    .navbar-brand {
+        width: auto;
+    }
+
     .user-profile-header {
-        display: block;
+        display: none;
     }
 
     .navbar-menu {
@@ -275,6 +303,8 @@
     }
 
     .btn-logout-mobile {
+        display: flex;
+        /* Show only on mobile */
         color: #dc3545;
         margin-top: auto;
         border: 1px solid #fee2e2;

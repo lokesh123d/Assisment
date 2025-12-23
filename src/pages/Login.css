@@ -27,7 +27,7 @@
 }
 
 .nav-logo {
-    max-width: 200px;
+    max-width: 240px;
     /* Adjust based on your logo image logic size, making it clearly visible */
     height: auto;
     /* If strictly using generated text logo: */

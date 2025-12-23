@@ -23,6 +23,38 @@ const Admin = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState(null);
     const [users, setUsers] = useState([]);
+    const [quizzes, setQuizzes] = useState([]);
+
+    const fetchQuizzes = async () => {
+        try {
+            setLoading(true);
+            const response = await api.get('/quizzes');
+            setQuizzes(response.data.quizzes);
+        } catch (error) {
+            console.error('Error fetching quizzes:', error);
+            setMessage({ type: 'error', text: 'Failed to load quizzes' });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteQuiz = async (quizId) => {
+        if (!window.confirm('Are you sure you want to delete this quiz? This action cannot be undone.')) {
+            return;
+        }
+
+        try {
+            setLoading(true);
+            await api.delete(`/quizzes/${quizId}`);
+            setMessage({ type: 'success', text: 'Quiz deleted successfully' });
+            fetchQuizzes(); // Refresh list
+        } catch (error) {
+            console.error('Error deleting quiz:', error);
+            setMessage({ type: 'error', text: 'Failed to delete quiz' });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const fetchUsers = async () => {
         try {
@@ -344,6 +376,12 @@ const Admin = () => {
                         onClick={() => { setActiveTab('users'); fetchUsers(); }}
                     >
                         <FiUsers /> Manage Users
+                    </button>
+                    <button
+                        className={`tab-button ${activeTab === 'quizzes' ? 'active' : ''}`}
+                        onClick={() => { setActiveTab('quizzes'); fetchQuizzes(); }}
+                    >
+                        <FiFileText /> Manage Quizzes
                     </button>
                 </div>
 
@@ -728,6 +766,65 @@ const Admin = () => {
                                                 >
                                                     <FiShield />
                                                     {u.role === 'admin' ? ' Remove Admin' : ' Make Admin'}
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'quizzes' && (
+                    <div className="admin-card fade-in">
+                        <div className="card-header">
+                            <h2><FiFileText /> Manage Quizzes</h2>
+                            <p>View and delete active quizzes</p>
+                        </div>
+
+                        <div className="users-table-container">
+                            <table className="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Difficulty</th>
+                                        <th>Questions</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {quizzes.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="6" style={{ textAlign: 'center', padding: '2rem' }}>
+                                                No quizzes found. Create one first!
+                                            </td>
+                                        </tr>
+                                    ) : quizzes.map(quiz => (
+                                        <tr key={quiz._id}>
+                                            <td style={{ fontWeight: '600' }}>{quiz.title}</td>
+                                            <td>{quiz.category || 'General'}</td>
+                                            <td>
+                                                <span className={`role-badge ${quiz.difficulty === 'hard' ? 'admin' : quiz.difficulty === 'medium' ? 'student' : 'success'}`}
+                                                    style={{
+                                                        backgroundColor: quiz.difficulty === 'hard' ? '#fee2e2' : quiz.difficulty === 'medium' ? '#fef3c7' : '#d1fae5',
+                                                        color: quiz.difficulty === 'hard' ? '#991b1b' : quiz.difficulty === 'medium' ? '#92400e' : '#065f46'
+                                                    }}>
+                                                    {quiz.difficulty}
+                                                </span>
+                                            </td>
+                                            <td>{quiz.questions?.length || 0}</td>
+                                            <td>{new Date(quiz.createdAt).toLocaleDateString()}</td>
+                                            <td>
+                                                <button
+                                                    className="btn-small btn-danger"
+                                                    onClick={() => handleDeleteQuiz(quiz._id)}
+                                                    disabled={loading}
+                                                    title="Delete Quiz"
+                                                >
+                                                    <FiShield /> Delete
                                                 </button>
                                             </td>
                                         </tr>

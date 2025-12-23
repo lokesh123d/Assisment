@@ -32,7 +32,7 @@ const Login = () => {
         <div className="login-wrapper">
             <div className="login-content-centered">
                 <div className="brand-logo">
-                    <img src="/navgurukul_logo.png" alt="navgurukul" className="nav-logo" />
+                    <img src="/navgurukul_login.png" alt="navgurukul" className="nav-logo" />
                     {/* Fallback text if logo doesn't load immediately or to match style if transparent bg looks better with dark text */}
                 </div>
 
