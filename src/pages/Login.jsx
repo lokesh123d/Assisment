@@ -29,73 +29,46 @@ const Login = () => {
     };
 
     return (
-        <div className="login-page">
-            <div className="login-sidebar">
-                <div className="sidebar-brand">
-                    <div className="brand-icon">📝</div>
-                    <span>QuizMaster</span>
+        <div className="login-wrapper">
+            <div className="login-content-centered">
+                <div className="brand-logo">
+                    <img src="/navgurukul_logo.png" alt="navgurukul" className="nav-logo" />
+                    {/* Fallback text if logo doesn't load immediately or to match style if transparent bg looks better with dark text */}
                 </div>
-            </div>
 
-            <div className="login-main">
-                <div className="login-container">
-                    <div className="login-box">
-                        <h1>Welcome back</h1>
+                <h1 className="login-title">Campus Learning<br />Dashboard</h1>
+                <p className="login-subtitle">Sign in to access your learning journey</p>
 
-                        <div className="form-group">
-                            <label>Email address</label>
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                className="form-input"
-                                disabled
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Password</label>
-                            <input
-                                type="password"
-                                placeholder="Enter password"
-                                className="form-input"
-                                disabled
-                            />
-                        </div>
-
-                        <div className="form-options">
-                            <label className="checkbox-label">
-                                <input type="checkbox" disabled />
-                                <span>Remember me for 30 days</span>
-                            </label>
-                            <a href="#" className="forgot-link">Forgot password?</a>
-                        </div>
-
-                        <button className="btn-signin" disabled>
-                            Sign in
-                        </button>
-
-                        <div className="divider">
-                            <span>Or sign in with Google</span>
-                        </div>
-
-                        <div className="google-signin">
-                            <GoogleLogin
-                                onSuccess={handleSuccess}
-                                onError={handleError}
-                                useOneTap
-                                theme="outline"
-                                size="large"
-                                text="signin_with"
-                                shape="rectangular"
-                                width="100%"
-                            />
-                        </div>
-
-                        <div className="signup-link">
-                            New to QuizMaster? <a href="#">Sign up</a>
-                        </div>
+                <div className="info-card">
+                    <div className="info-icon-wrapper">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                    </div>
+                    <div className="info-text">
+                        <h3>Navgurukul Access Only</h3>
+                        <p>Only users with <strong>@navgurukul.org</strong> email addresses can access this platform.</p>
                     </div>
                 </div>
+
+                <div className="google-btn-container">
+                    <GoogleLogin
+                        onSuccess={handleSuccess}
+                        onError={handleError}
+                        useOneTap
+                        theme="filled_white"
+                        size="large"
+                        text="continue_with"
+                        shape="rectangular"
+                        width="320"
+                    />
+                </div>
+
+                <p className="terms-footer">
+                    By signing in, you agree to our Terms of Service and Privacy Policy
+                </p>
             </div>
         </div>
     );
