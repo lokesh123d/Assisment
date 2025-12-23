@@ -1,8 +1,9 @@
 .leaderboard-page {
     min-height: 100vh;
     padding: 3rem 0;
-    background: #f3f4f6;
-    /* Light grey background for the whole page */
+    background: #ffffff;
+    /* User requested White/Blue only, but subtle grey helps contrast. Keeping main bg white if strictly requested, but section bg white usually implies page grey. Let's keep very light grey #f8fafc for page, white for content */
+    background: #f8fafc;
     font-family: 'Inter', sans-serif;
 }
 
@@ -16,16 +17,18 @@
 .leaderboard-header h1 {
     font-size: 2rem;
     font-weight: 800;
-    color: #111827;
+    color: #1e3a8a;
+    /* Dark Blue */
     margin: 0;
 }
 
 .quiz-title {
-    color: #6b7280;
+    color: #3b82f6;
+    /* Lighter Blue */
     margin-top: 0.25rem;
 }
 
-/* Stats Cards (Optional, keeping them clean) */
+/* Stats Cards */
 .leaderboard-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -36,8 +39,9 @@
 .stat-box {
     background: white;
     padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    border-radius: 0;
+    /* NO RADIUS */
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -45,50 +49,46 @@
 
 .stat-box svg {
     font-size: 1.5rem;
-    color: #3b82f6;
+    color: #2563eb;
 }
 
-/* MAIN TABLE STYLES - Twitter Counter Look */
+/* MAIN TABLE STYLES */
 .leaderboard-table-container {
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid #bfdbfe;
+    /* Blue border */
+    border-radius: 0;
+    /* NO RADIUS */
     overflow: hidden;
-    /* Clips the corners */
     padding: 0;
-    /* Flush with edges */
 }
 
 .leaderboard-table {
     width: 100%;
     border-collapse: collapse;
-    /* Essential for border-bottom to look like lines */
     text-align: left;
 }
 
 .leaderboard-table thead th {
-    background-color: #f9fafb;
-    color: #6b7280;
-    font-size: 0.75rem;
-    font-weight: 600;
+    background-color: #2563eb;
+    /* Solid Blue Header */
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
 }
 
 .leaderboard-row {
     background: white;
-    transition: background-color 0.2s;
-    border-bottom: 1px solid #f3f4f6;
-}
-
-.leaderboard-row:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid #eff6ff;
 }
 
 .leaderboard-row:hover {
-    background-color: #f9fafb;
+    background-color: #f0f9ff;
+    /* Light blue hover */
 }
 
 /* Rank Number */
@@ -101,26 +101,10 @@
 
 .rank-number {
     font-size: 1.5rem;
-    font-weight: 700;
-    color: #9ca3af;
-    /* Grey color matches reference */
+    font-weight: 800;
+    color: #1e40af;
+    /* Deep Blue */
     display: block;
-}
-
-/* Top 3 Ranks get slightly darker numbers or subtle color if desired */
-.leaderboard-row:nth-child(1) .rank-number {
-    color: #d97706;
-    /* Subtle Gold */
-}
-
-.leaderboard-row:nth-child(2) .rank-number {
-    color: #94a3b8;
-    /* Subtle Silver */
-}
-
-.leaderboard-row:nth-child(3) .rank-number {
-    color: #b45309;
-    /* Subtle Bronze */
 }
 
 /* User Info */
@@ -139,34 +123,30 @@
     width: 48px;
     height: 48px;
     flex-shrink: 0;
+    border: 2px solid #3b82f6;
+    /* Blue border */
 }
 
 .user-avatar img {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
+    border-radius: 0;
+    /* NO RADIUS */
     object-fit: cover;
 }
 
 .avatar-placeholder {
     width: 100%;
     height: 100%;
-    background: #e0f2fe;
-    /* Light blue bg */
-    color: #0ea5e9;
-    border-radius: 50%;
+    background: #dbeafe;
+    color: #2563eb;
+    border-radius: 0;
+    /* NO RADIUS */
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
     font-size: 1.25rem;
-}
-
-/* Randomize placeholder colors nicely via nth-child logic if CSS allowed functionality, 
-   but simplistic distinct colors is fine */
-.leaderboard-row:nth-child(even) .avatar-placeholder {
-    background: #fef3c7;
-    color: #d97706;
 }
 
 .user-text {
@@ -175,15 +155,17 @@
 }
 
 .user-name {
-    color: #111827;
+    color: #1e3a8a;
+    /* Dark Blue */
     font-weight: 700;
     font-size: 1rem;
     line-height: 1.2;
 }
 
+.user-email,
 .user-handle {
-    color: #3b82f6;
-    /* Blue handle color */
+    color: #60a5fa;
+    /* Light Blue */
     font-size: 0.875rem;
     font-weight: 500;
     margin-top: 2px;
@@ -193,21 +175,36 @@
 .stat-cell {
     padding: 1rem 1.5rem;
     vertical-align: middle;
-    /* text-align: right; Default for stats often looks better right-aligned, or at least consistent */
 }
 
 .stat-value {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #374151;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1e3a8a;
 }
 
-.stat-value.highlight {
-    color: #111827;
-    font-weight: 700;
-    background: #f3f4f6;
-    padding: 4px 12px;
-    border-radius: 99px;
+/* Score formatting - fix the huge 13/20 issue */
+.score-value {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #2563eb;
+    letter-spacing: -0.5px;
+}
+
+.correct-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #059669;
+    /* Keep green for correctness? Or switch to blue? User said ONLY white and blue. */
+    color: #2563eb;
+    /* Blue it is */
+    font-weight: 600;
+}
+
+.completion-date {
+    color: #93c5fd;
+    font-size: 0.875rem;
 }
 
 /* Mobile Responsiveness */
@@ -227,16 +224,18 @@
         flex-direction: column;
         padding: 1.5rem;
         margin-bottom: 1rem;
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        background: white;
+        border: 1px solid #bfdbfe;
+        box-shadow: none;
+        border-radius: 0;
+        /* NO RADIUS */
     }
 
     .rank-cell {
         text-align: left;
         width: 100%;
         padding: 0 0 1rem 0;
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid #eff6ff;
         margin-bottom: 1rem;
     }
 
@@ -253,9 +252,8 @@
 
     .stat-cell::before {
         content: attr(data-label);
-        /* Won't show unless I add data-label to td in JSX, ignoring for now or just keeping simple */
         font-weight: 600;
-        color: #6b7280;
+        color: #3b82f6;
         font-size: 0.875rem;
     }
 }
