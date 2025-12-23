@@ -21,8 +21,7 @@ const Navbar = () => {
             <div className="container">
                 <div className="navbar-content">
                     <Link to="/" className="navbar-brand" onClick={closeMenu}>
-                        <div className="logo-icon">📝</div>
-                        <span>QuizMaster</span>
+                        <img src="/navgurukul_logo.png" alt="QuizMaster" className="navbar-logo-img" style={{ maxHeight: '40px' }} />
                     </Link>
 
                     <div className="navbar-actions">
