@@ -2,6 +2,20 @@
     min-height: 100vh;
     padding: 3rem 0;
     background: linear-gradient(135deg, var(--extra-light-blue) 0%, var(--white) 100%);
+    display: flex;
+    justify-content: center;
+    /* Add Flex centering if container-sm isn't doing it */
+}
+
+/* Ensure container-sm (usually global) handles auto margin, or enforce it here if missing */
+.container-sm {
+    max-width: 800px;
+    /* Or whatever width is standard */
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .admin-header {
