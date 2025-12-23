@@ -8,6 +8,7 @@ const Admin = () => {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('upload');
     const [file, setFile] = useState(null);
+    const [quizType, setQuizType] = useState('mcq');
     const [jsonPreview, setJsonPreview] = useState(null);
     const [apiKey, setApiKey] = useState('');
     const [jsonInput, setJsonInput] = useState('');
@@ -223,30 +224,67 @@ const Admin = () => {
         }
     };
 
-    const loadSampleJson = () => {
-        const sampleJson = {
-            "title": "Sample Quiz",
-            "description": "A sample quiz",
-            "category": "General",
+    const getSampleJsonString = (type) => {
+        const base = {
+            "title": type === 'mcq' ? "General Knowledge Quiz" :
+                type === 'long-answer' ? "Essay Writing Test" :
+                    type === 'code-output' ? "JS Output Challenge" : "Python Coding Test",
+            "description": "A sample quiz to demonstrate the format.",
+            "category": type === 'code-write' || type === 'code-output' ? "Programming" : "General",
             "difficulty": "medium",
-            "timeLimit": 30,
-            "questions": [
-                {
-                    "question": "What is 2 + 2?",
-                    "options": ["3", "4", "5", "6"],
-                    "correctAnswer": 1,
-                    "explanation": "2 + 2 equals 4"
-                },
-                {
-                    "question": "What is the capital of France?",
-                    "options": ["London", "Paris", "Berlin", "Madrid"],
-                    "correctAnswer": 1,
-                    "explanation": "Paris is the capital of France"
-                }
-            ]
+            "timeLimit": 30
         };
-        setJsonInput(JSON.stringify(sampleJson, null, 2));
-        setJsonPreview(sampleJson);
+
+        let questions = [];
+
+        if (type === 'mcq') {
+            questions = [{
+                "type": "mcq",
+                "question": "What is the capital of France?",
+                "options": ["London", "Paris", "Berlin", "Madrid"],
+                "correctAnswer": 1,
+                "explanation": "Paris is the capital of France"
+            }];
+        } else if (type === 'long-answer') {
+            questions = [{
+                "type": "long-answer",
+                "question": "Explain the impact of AI on modern society.",
+                "minWords": 50,
+                "maxWords": 500,
+                "sampleAnswer": "AI impacts society by automating tasks..."
+            }];
+        } else if (type === 'code-output') {
+            questions = [{
+                "type": "code-output",
+                "question": "What will be the output of this code?",
+                "codeSnippet": "console.log(2 + '2');",
+                "language": "javascript",
+                "correctAnswer": "22",
+                "explanation": "String concatenation happens."
+            }];
+        } else if (type === 'code-write') {
+            questions = [{
+                "type": "code-write",
+                "question": "Write a function to add two numbers.",
+                "language": "javascript",
+                "testCases": [
+                    { "input": "2, 3", "expectedOutput": "5" },
+                    { "input": "10, 20", "expectedOutput": "30" }
+                ]
+            }];
+        }
+
+        return JSON.stringify({ ...base, questions }, null, 2);
+    };
+
+    const getPlaceholder = (type) => {
+        return `Paste your ${type.toUpperCase()} JSON here...\n` + getSampleJsonString(type);
+    };
+
+    const loadSampleJson = () => {
+        const jsonStr = getSampleJsonString(quizType);
+        setJsonInput(jsonStr);
+        setJsonPreview(JSON.parse(jsonStr));
     };
 
     return (
@@ -464,14 +502,33 @@ const Admin = () => {
                         <form onSubmit={handleManualSubmit}>
                             <div className="form-group">
                                 <div className="json-editor-header">
-                                    <label className="form-label">Quiz JSON Content *</label>
+                                    <div className="json-controls-left">
+                                        <label className="form-label">Quiz Type</label>
+                                        <select
+                                            className="form-select quiz-type-select"
+                                            value={quizType}
+                                            onChange={(e) => {
+                                                setQuizType(e.target.value);
+                                                // Optional: Auto-load sample when type changes? 
+                                                // Better to let user click "Load Sample" to avoid overwriting work.
+                                            }}
+                                        >
+                                            <option value="mcq">Multiple Choice (Standard)</option>
+                                            <option value="long-answer">Written Test (Essay/Subjective)</option>
+                                            <option value="code-output">Output Based (Predict Output)</option>
+                                            <option value="code-write">Code Written Test (Programming)</option>
+                                        </select>
+                                    </div>
+
                                     <div className="json-actions">
                                         <button
                                             type="button"
                                             className="btn-small btn-secondary"
                                             onClick={loadSampleJson}
                                         >
-                                            Load Sample
+                                            Load {quizType === 'mcq' ? 'MCQ' :
+                                                quizType === 'long-answer' ? 'Written' :
+                                                    quizType === 'code-output' ? 'Output' : 'Code'} Sample
                                         </button>
                                         <button
                                             type="button"
@@ -486,27 +543,12 @@ const Admin = () => {
                                     className="json-input"
                                     value={jsonInput}
                                     onChange={handleJsonInputChange}
-                                    placeholder='Paste your JSON here, for example:
-{
-  "title": "My Quiz",
-  "description": "Quiz description",
-  "category": "General",
-  "difficulty": "medium",
-  "timeLimit": 30,
-  "questions": [
-    {
-      "question": "Your question?",
-      "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-      "correctAnswer": 0,
-      "explanation": "Explanation here"
-    }
-  ]
-}'
+                                    placeholder={getPlaceholder(quizType)}
                                     rows="15"
                                     required
                                 />
                                 <small className="form-hint">
-                                    💡 Paste JSON content and click "Validate & Preview" to check format
+                                    💡 Select a Quiz Type and click "Load Sample" to see the correct format!
                                 </small>
                             </div>
 
@@ -514,7 +556,7 @@ const Admin = () => {
                             {jsonPreview && activeTab === 'manual' && (
                                 <div className="json-preview-section">
                                     <div className="preview-header">
-                                        <FiEye /> Quiz Preview
+                                        <FiEye /> Quiz Preview ({quizType.toUpperCase()})
                                     </div>
                                     <div className="preview-stats">
                                         <div className="stat-item">
@@ -537,14 +579,49 @@ const Admin = () => {
                                         <h4>Questions Preview:</h4>
                                         {jsonPreview.questions?.slice(0, 3).map((q, idx) => (
                                             <div key={idx} className="question-preview-item">
-                                                <strong>Q{idx + 1}:</strong> {q.question}
-                                                <div className="options-preview">
-                                                    {q.options?.map((opt, i) => (
-                                                        <div key={i} className={i === q.correctAnswer ? 'correct-opt' : ''}>
-                                                            {String.fromCharCode(65 + i)}. {opt}
-                                                            {i === q.correctAnswer && ' ✓'}
+                                                <div className="q-header">
+                                                    <strong>Q{idx + 1} ({q.type || 'mcq'}):</strong>
+                                                    <span className="q-text">{q.question}</span>
+                                                </div>
+
+                                                {/* Preview based on Type */}
+                                                <div className="q-body-preview">
+                                                    {/* MCQ Options */}
+                                                    {(!q.type || q.type === 'mcq') && (
+                                                        <div className="options-preview">
+                                                            {q.options?.map((opt, i) => (
+                                                                <div key={i} className={i === q.correctAnswer ? 'correct-opt' : ''}>
+                                                                    {String.fromCharCode(65 + i)}. {opt}
+                                                                    {i === q.correctAnswer && ' ✓'}
+                                                                </div>
+                                                            ))}
                                                         </div>
-                                                    ))}
+                                                    )}
+
+                                                    {/* Written / Short Answer */}
+                                                    {(q.type === 'short-answer' || q.type === 'long-answer') && (
+                                                        <div className="written-preview">
+                                                            <em>Sample Answer:</em> {q.sampleAnswer || 'N/A'}
+                                                            <br />
+                                                            <small>Max Words: {q.maxWords || 'Unlimited'}</small>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Output Based */}
+                                                    {q.type === 'code-output' && (
+                                                        <div className="code-preview">
+                                                            <pre className="code-block">{q.codeSnippet}</pre>
+                                                            <div className="correct-opt">Expected: {q.correctAnswer}</div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Code Write */}
+                                                    {q.type === 'code-write' && (
+                                                        <div className="code-write-preview">
+                                                            <div>Language: {q.language || 'Any'}</div>
+                                                            <div>Test Cases: {q.testCases?.length || 0}</div>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         ))}
@@ -571,24 +648,8 @@ const Admin = () => {
                         </form>
 
                         <div className="json-example">
-                            <h3>📝 JSON Format Guide:</h3>
-                            <pre>
-                                {`{
-  "title": "Quiz Title",
-  "description": "Quiz description",
-  "category": "Category Name",
-  "difficulty": "easy|medium|hard",
-  "timeLimit": 30,
-  "questions": [
-    {
-      "question": "Your question?",
-      "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-      "correctAnswer": 0,
-      "explanation": "Why this is correct"
-    }
-  ]
-}`}
-                            </pre>
+                            <h3>📝 {quizType === 'mcq' ? 'MCQ' : quizType.replace('-', ' ').toUpperCase()} Format Guide:</h3>
+                            <pre>{getSampleJsonString(quizType)}</pre>
                         </div>
                     </div>
                 )}

@@ -200,7 +200,24 @@ router.post('/:id/submit', protect, async (req, res) => {
         answers.forEach(answer => {
             const question = quiz.questions.id(answer.questionId);
             if (question) {
-                const isCorrect = question.correctAnswer === answer.selectedAnswer;
+                let isCorrect = false;
+
+                // Grading Logic
+                if (!question.type || question.type === 'mcq' || question.type === 'true-false') {
+                    // Index comparison for MCQs
+                    isCorrect = question.correctAnswer === answer.selectedAnswer;
+                } else if (question.type === 'code-output') {
+                    // String comparison for Output (trim and lower case to be forgiving)
+                    const correctStub = String(question.correctAnswer).trim().toLowerCase();
+                    const userStub = String(answer.selectedAnswer || '').trim().toLowerCase();
+                    isCorrect = correctStub === userStub;
+                } else {
+                    // Written / Code Write: Cannot auto-grade strictly. 
+                    // For now, we assume FALSE (manual review) or just save it.
+                    // User asked to "send to admin". We save the answer.
+                    isCorrect = false;
+                }
+
                 if (isCorrect) correctCount++;
 
                 detailedAnswers.push({
@@ -209,8 +226,9 @@ router.post('/:id/submit', protect, async (req, res) => {
                     selectedAnswer: answer.selectedAnswer,
                     correctAnswer: question.correctAnswer,
                     isCorrect,
+                    type: question.type || 'mcq',
                     explanation: question.explanation,
-                    options: question.options
+                    options: question.options // Only for display if exists
                 });
             }
         });

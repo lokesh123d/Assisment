@@ -50,7 +50,17 @@ const Submissions = () => {
 
     const handleView = async (filename) => {
         try {
-            window.open(`${import.meta.env.VITE_API_URL}/submissions/view/${filename}`, '_blank');
+            // Use api.get to include the Auth Token
+            const response = await api.get(`/submissions/view/${filename}`, {
+                responseType: 'blob'
+            });
+
+            // Create a Blob URL
+            const file = new Blob([response.data], { type: 'application/pdf' });
+            const fileURL = URL.createObjectURL(file);
+
+            // Open in new tab
+            window.open(fileURL, '_blank');
         } catch (error) {
             console.error('Error viewing report:', error);
             setMessage({ type: 'error', text: 'Failed to view report' });

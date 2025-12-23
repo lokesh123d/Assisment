@@ -102,13 +102,23 @@ export const validateQuizData = (quizData) => {
             throw new Error(`Question ${index + 1} must have a valid question text`);
         }
 
-        if (!Array.isArray(q.options) || q.options.length < 2) {
-            throw new Error(`Question ${index + 1} must have at least 2 options`);
+        // Validation for MCQ / True-False
+        if (!q.type || q.type === 'mcq' || q.type === 'true-false') {
+            if (!Array.isArray(q.options) || q.options.length < 2) {
+                throw new Error(`Question ${index + 1} (MCQ) must have at least 2 options`);
+            }
+            if (typeof q.correctAnswer !== 'number' || q.correctAnswer < 0 || q.correctAnswer >= q.options.length) {
+                throw new Error(`Question ${index + 1} (MCQ) must have a valid correctAnswer index`);
+            }
         }
 
-        if (typeof q.correctAnswer !== 'number' || q.correctAnswer < 0 || q.correctAnswer >= q.options.length) {
-            throw new Error(`Question ${index + 1} must have a valid correctAnswer index`);
+        // Output Based
+        if (q.type === 'code-output') {
+            if (!q.codeSnippet) throw new Error(`Question ${index + 1} (Code Output) must have a code snippet`);
+            if (!q.correctAnswer) throw new Error(`Question ${index + 1} (Code Output) must have a correct answer`);
         }
+
+        // Written / Code Write (Just needs question text, which is already checked)
     });
 
     return true;

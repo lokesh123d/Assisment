@@ -140,10 +140,35 @@
 .json-editor-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
+    /* Align actions with input bottom */
     margin-bottom: 0.75rem;
     flex-wrap: wrap;
     gap: 1rem;
+}
+
+.json-controls-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+.quiz-type-select {
+    padding: 0.5rem;
+    border: 2px solid var(--light-gray);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    font-size: 0.9375rem;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.quiz-type-select:focus {
+    border-color: var(--primary-blue);
+    outline: none;
 }
 
 .json-actions {
@@ -351,6 +376,62 @@
 .btn-success:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+}
+
+/* Advanced Quiz Previews */
+.q-header {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.q-header strong {
+    white-space: nowrap;
+    color: var(--primary-blue);
+}
+
+.q-text {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.written-preview {
+    background: #fff;
+    padding: 1rem;
+    border: 1px dashed var(--text-light);
+    border-radius: var(--radius-md);
+    color: var(--text-dark);
+}
+
+.code-preview {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+}
+
+.code-block {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.code-preview .correct-opt {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #444;
+    color: #4ade80;
+    /* Green for output */
+}
+
+.code-write-preview {
+    background: #f8fafc;
+    padding: 1rem;
+    border-left: 4px solid var(--secondary-blue);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 @media (max-width: 768px) {

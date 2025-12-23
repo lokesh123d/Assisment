@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema({
         },
         answers: [{
             questionId: String,
-            selectedAnswer: Number,
+            selectedAnswer: mongoose.Schema.Types.Mixed,
             isCorrect: Boolean
         }]
     }],

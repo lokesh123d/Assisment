@@ -22,7 +22,7 @@ export const generateQuizReportPDF = async (submissionData) => {
     return new Promise((resolve, reject) => {
         try {
             // Create PDF document
-            const doc = new PDFDocument({ margin: 50 });
+            const doc = new PDFDocument({ margin: 50, bufferPages: true });
             const stream = fs.createWriteStream(filepath);
 
             doc.pipe(stream);
@@ -59,15 +59,32 @@ export const generateQuizReportPDF = async (submissionData) => {
             doc.fontSize(16).fillColor('#1e293b').text('Score Summary', { underline: true });
             doc.moveDown(0.5);
 
+            // detailedAnswers helps determine if it's a manual review
+            const hasManualQuestions = result.detailedAnswers.some(a =>
+                a.type === 'long-answer' || a.type === 'short-answer' || a.type === 'code-write'
+            );
+
             // Score box
             const scoreBoxY = doc.y;
-            const scoreColor = result.percentage >= 80 ? '#10b981' : result.percentage >= 60 ? '#2563eb' : result.percentage >= 40 ? '#f59e0b' : '#ef4444';
+            let scoreColor = result.percentage >= 80 ? '#10b981' : result.percentage >= 60 ? '#2563eb' : result.percentage >= 40 ? '#f59e0b' : '#ef4444';
+            let statusText = result.passed ? 'PASSED ✓' : 'NEEDS IMPROVEMENT';
+
+            if (hasManualQuestions) {
+                scoreColor = '#f59e0b'; // Orange
+                statusText = 'PENDING REVIEW ⏳';
+            }
 
             doc.roundedRect(50, scoreBoxY, 500, 80, 5).fillAndStroke(scoreColor, scoreColor);
             doc.fillColor('#ffffff').fontSize(14);
             doc.text(`Score: ${result.score} / ${result.totalQuestions}`, 60, scoreBoxY + 15);
-            doc.text(`Percentage: ${result.percentage}%`, 60, scoreBoxY + 35);
-            doc.text(`Status: ${result.passed ? 'PASSED ✓' : 'NEEDS IMPROVEMENT'}`, 60, scoreBoxY + 55);
+
+            if (hasManualQuestions) {
+                doc.text(`Percentage: N/A (Manual Grading)`, 60, scoreBoxY + 35);
+            } else {
+                doc.text(`Percentage: ${result.percentage}%`, 60, scoreBoxY + 35);
+            }
+
+            doc.text(`Status: ${statusText}`, 60, scoreBoxY + 55);
 
             doc.moveDown(6);
 
@@ -76,44 +93,80 @@ export const generateQuizReportPDF = async (submissionData) => {
             doc.moveDown();
 
             result.detailedAnswers.forEach((answer, index) => {
-                // Check if we need a new page
-                if (doc.y > 700) {
+                // Check if we need a new page (conservative check)
+                if (doc.y > 650) {
                     doc.addPage();
                 }
 
                 // Question number and status
-                const questionY = doc.y;
-                const statusColor = answer.isCorrect ? '#10b981' : '#ef4444';
-                const statusIcon = answer.isCorrect ? '✓' : '✗';
+                const startY = doc.y;
+                let statusColor = answer.isCorrect ? '#10b981' : '#ef4444';
+                let statusIcon = answer.isCorrect ? '✓' : '✗';
 
-                doc.fontSize(14).fillColor('#1e293b').text(`Question ${index + 1}:`, 50, questionY);
-                doc.fontSize(12).fillColor(statusColor).text(statusIcon, 520, questionY);
+                if (answer.type === 'long-answer' || answer.type === 'short-answer' || answer.type === 'code-write') {
+                    statusColor = '#f59e0b';
+                    statusIcon = '⏳';
+                }
+
+                doc.fontSize(14).fillColor('#1e293b').text(`Question ${index + 1}:`, 50, startY);
+                doc.fontSize(12).fillColor(statusColor).text(statusIcon, 520, startY);
 
                 doc.moveDown(0.5);
 
-                // Question text
+                // Question text - Use Flow Logic
+                doc.x = 50;
                 doc.fontSize(11).fillColor('#1e293b').text(answer.question, { width: 500 });
                 doc.moveDown(0.5);
 
-                // Options
-                answer.options.forEach((option, optIndex) => {
-                    const isSelected = optIndex === answer.selectedAnswer;
-                    const isCorrect = optIndex === answer.correctAnswer;
+                // Options or Text Answer
+                if (answer.type === 'mcq' || !answer.type) {
+                    // Standard MCQ Display
+                    if (answer.options && Array.isArray(answer.options)) {
+                        answer.options.forEach((option, optIndex) => {
+                            const isSelected = optIndex === answer.selectedAnswer;
+                            const isCorrect = optIndex === answer.correctAnswer;
 
-                    let optionColor = '#64748b';
-                    let optionPrefix = String.fromCharCode(65 + optIndex) + '. ';
+                            let optionColor = '#64748b';
+                            let optionPrefix = String.fromCharCode(65 + optIndex) + '. ';
 
-                    if (isCorrect) {
-                        optionColor = '#10b981';
-                        optionPrefix += '✓ ';
+                            if (isCorrect) {
+                                optionColor = '#10b981';
+                                optionPrefix += '✓ ';
+                            }
+                            if (isSelected && !isCorrect) {
+                                optionColor = '#ef4444';
+                                optionPrefix += '✗ ';
+                            }
+
+                            doc.x = 50;
+                            doc.fontSize(10).fillColor(optionColor).text(optionPrefix + option, { indent: 10, width: 480 });
+                        });
                     }
-                    if (isSelected && !isCorrect) {
-                        optionColor = '#ef4444';
-                        optionPrefix += '✗ ';
-                    }
+                } else if (answer.type === 'code-output' || answer.type === 'short-answer' || answer.type === 'code-write') {
+                    // Text/Code Answer Display
+                    doc.x = 50;
+                    doc.fontSize(10).fillColor('#475569').text('Your Answer:', { indent: 10, bold: true });
 
-                    doc.fontSize(10).fillColor(optionColor).text(optionPrefix + option, { indent: 10 });
-                });
+                    doc.x = 50;
+                    doc.fontSize(10).fillColor('#1e293b').text(String(answer.selectedAnswer || 'No Answer'), { indent: 20, width: 480 });
+
+                    if (answer.type === 'code-output') {
+                        // Show correct answer for output predictions
+                        doc.moveDown(0.3);
+                        doc.x = 50;
+                        doc.fontSize(10).fillColor('#10b981').text('Correct Answer:', { indent: 10, bold: true });
+
+                        doc.x = 50;
+                        doc.fontSize(10).fillColor('#10b981').text(String(answer.correctAnswer), { indent: 20 });
+                    }
+                } else if (answer.type === 'long-answer') {
+                    // Long Answer Display
+                    doc.x = 50;
+                    doc.fontSize(10).fillColor('#475569').text('Your Essay:', { indent: 10, bold: true });
+
+                    doc.x = 50;
+                    doc.fontSize(10).fillColor('#1e293b').text(String(answer.selectedAnswer || 'No Answer'), { indent: 20, width: 480 });
+                }
 
                 doc.moveDown(0.3);
 

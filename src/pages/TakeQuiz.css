@@ -93,6 +93,115 @@
     font-weight: 600;
 }
 
+/* Question Content Layout */
+.question-content {
+    margin: 2rem 0;
+}
+
+/* Written / Short Answer */
+.written-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--light-gray);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-dark);
+    font-family: inherit;
+    resize: vertical;
+    transition: all var(--transition-base);
+}
+
+.written-input:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.word-count {
+    text-align: right;
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+}
+
+/* Code Output Style */
+.code-output-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.code-snippet {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1.5rem;
+    border-radius: var(--radius-md);
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+    font-size: 0.9375rem;
+    border-left: 4px solid var(--secondary-blue);
+}
+
+.output-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.output-input-wrapper label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.output-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--light-gray);
+    border-radius: var(--radius-md);
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+}
+
+.output-input:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+}
+
+/* Code Write Style */
+.code-write-section {
+    border: 1px solid var(--light-gray);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.code-header {
+    background: #f1f5f9;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--light-gray);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.code-editor-input {
+    width: 100%;
+    min-height: 300px;
+    padding: 1rem;
+    border: none;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.code-editor-input:focus {
+    outline: none;
+}
+
 .options-list {
     display: flex;
     flex-direction: column;
@@ -357,9 +466,24 @@
     color: #495057;
 }
 
+.icon-warning {
+    color: #f59e0b;
+    font-size: 1.5rem;
+}
+
+.status-pending {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #f59e0b;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
 .results-actions {
     display: flex;
     gap: 1rem;
+    margin-top: 2rem;
     justify-content: center;
     flex-wrap: wrap;
 }
