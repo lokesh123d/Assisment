@@ -103,31 +103,16 @@ const Dashboard = () => {
                     <div className="performance-card fade-in">
                         <h2>Overall Performance</h2>
                         <div className="performance-visual">
-                            <div className="circular-progress">
-                                <svg viewBox="0 0 200 200">
-                                    <circle
-                                        cx="100"
-                                        cy="100"
-                                        r="80"
-                                        fill="none"
-                                        stroke="var(--light-gray)"
-                                        strokeWidth="20"
-                                    />
-                                    <circle
-                                        cx="100"
-                                        cy="100"
-                                        r="80"
-                                        fill="none"
-                                        stroke="var(--primary-blue)"
-                                        strokeWidth="20"
-                                        strokeDasharray={`${(stats.averagePercentage / 100) * 502.65} 502.65`}
-                                        strokeLinecap="round"
-                                        transform="rotate(-90 100 100)"
-                                    />
-                                </svg>
-                                <div className="progress-text">
-                                    <span className="progress-value">{stats.averagePercentage}%</span>
-                                    <span className="progress-label">Average</span>
+                            <div className="linear-progress-wrapper">
+                                <div className="progress-info-row">
+                                    <span className="progress-label">Average Score</span>
+                                    <span className="progress-value-text">{stats.averagePercentage}%</span>
+                                </div>
+                                <div className="linear-progress-bar">
+                                    <div
+                                        className="progress-fill"
+                                        style={{ width: `${stats.averagePercentage}%` }}
+                                    ></div>
                                 </div>
                             </div>
                             <div className="performance-insights">
