@@ -1,6 +1,7 @@
 import PDFDocument from 'pdfkit';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 
 /**
  * Generate PDF report for quiz submission
@@ -8,9 +9,13 @@ import path from 'path';
 export const generateQuizReportPDF = async (submissionData) => {
     const { user, quiz, result, submittedAt } = submissionData;
 
+    // Use system temp directory for cloud compatibility (Vercel/Render)
+    // Persists only for the session/instance
+    const reportsBaseDir = path.join(os.tmpdir(), 'quiz_reports');
+
     // Sanitize title for folder name
     const sanitizedTitle = (quiz.title || 'Untitled_Quiz').replace(/[^a-z0-9]/gi, '_').substring(0, 50);
-    const reportsDir = path.join(process.cwd(), 'reports', sanitizedTitle);
+    const reportsDir = path.join(reportsBaseDir, sanitizedTitle);
 
     if (!fs.existsSync(reportsDir)) {
         fs.mkdirSync(reportsDir, { recursive: true });
@@ -24,8 +29,8 @@ export const generateQuizReportPDF = async (submissionData) => {
 
     return new Promise((resolve, reject) => {
         try {
-            // Create PDF document (Simplified for debugging)
-            const doc = new PDFDocument({ margin: 50 }); // bufferPages removed
+            // Create PDF document
+            const doc = new PDFDocument({ margin: 50 }); // bufferPages removed for safety
             const stream = fs.createWriteStream(filepath);
 
             console.log(`[PDF] Generating report: ${filepath}`);
@@ -33,27 +38,12 @@ export const generateQuizReportPDF = async (submissionData) => {
             doc.pipe(stream);
 
             // --- Header ---
-            doc.fillColor('#444444')
+            doc.fillColor('#4a9eff') // Blue header for verification
                 .fontSize(20)
                 .text('Quiz Submission Report', 110, 57)
                 .fontSize(10)
                 .text('NavGurukul Assessment Platform', 200, 50, { align: 'right' })
                 .moveDown();
-
-            // ... (Content remains the same) ...
-
-            // --- Footer (Disabled for debugging) ---
-            // const range = doc.bufferedPageRange();
-            // for (let i = range.start; i < range.start + range.count; i++) {
-            //     doc.switchToPage(i);
-            //     doc.fontSize(8).fillColor('#888888');
-            //     doc.text(
-            //         `Page ${i + 1} of ${range.count}`,
-            //         50,
-            //         doc.page.height - 30,
-            //         { align: 'center', width: 500 }
-            //     );
-            // }
 
             // --- Quiz Info ---
             doc.strokeColor('#aaaaaa')
@@ -93,8 +83,8 @@ export const generateQuizReportPDF = async (submissionData) => {
             doc.moveDown();
 
             result.detailedAnswers.forEach((ans, index) => {
-                // Check for page break
-                if (doc.y > 650) {
+                // Check for page break if y position is too low
+                if (doc.y > 700) {
                     doc.addPage();
                 }
 
@@ -110,13 +100,11 @@ export const generateQuizReportPDF = async (submissionData) => {
                 doc.fontSize(10).font('Helvetica').fillColor(isCorrect ? '#2b8a3e' : '#c92a2a');
 
                 let answerText = String(ans.selectedAnswer || 'No Answer');
-
-                // Truncate if extremely long (e.g. essay) to avoid single page overflow issues
                 if (answerText.length > 2000) answerText = answerText.substring(0, 2000) + '... (truncated)';
 
                 doc.text(`Your Answer: ${answerText}`, { width: 480 });
 
-                // Correct Answer (if not correct)
+                // Correct Answer
                 if (!isCorrect) {
                     doc.fillColor('#555555');
                     doc.text(`Correct Answer: ${ans.correctAnswer}`, { width: 480 });
@@ -130,22 +118,6 @@ export const generateQuizReportPDF = async (submissionData) => {
                 doc.strokeColor('#eeeeee').lineWidth(1).moveTo(50, doc.y).lineTo(550, doc.y).stroke();
                 doc.moveDown();
             });
-
-            // --- Footer (Page Numbers) ---
-            // --- Footer (Page Numbers) - Disabled ---
-            /*
-            const range = doc.bufferedPageRange();
-            for (let i = range.start; i < range.start + range.count; i++) {
-                doc.switchToPage(i);
-                doc.fontSize(8).fillColor('#888888');
-                doc.text(
-                    `Page ${i + 1} of ${range.count}`,
-                    50,
-                    doc.page.height - 30,
-                    { align: 'center', width: 500 }
-                );
-            }
-            */
 
             // Finalize PDF
             doc.end();
@@ -175,7 +147,7 @@ export const generateQuizReportPDF = async (submissionData) => {
  * Get all quiz reports (Recursive)
  */
 export const getReportsList = () => {
-    const reportsDir = path.join(process.cwd(), 'reports');
+    const reportsDir = path.join(os.tmpdir(), 'quiz_reports');
 
     if (!fs.existsSync(reportsDir)) {
         return [];
@@ -236,7 +208,7 @@ export const getReportsList = () => {
  * Delete old reports (older than 30 days)
  */
 export const cleanOldReports = () => {
-    const reportsDir = path.join(process.cwd(), 'reports');
+    const reportsDir = path.join(os.tmpdir(), 'quiz_reports');
 
     if (!fs.existsSync(reportsDir)) {
         return;
