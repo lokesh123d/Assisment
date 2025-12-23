@@ -24,9 +24,11 @@ export const generateQuizReportPDF = async (submissionData) => {
 
     return new Promise((resolve, reject) => {
         try {
-            // Create PDF document
-            const doc = new PDFDocument({ margin: 50, bufferPages: true });
+            // Create PDF document (Simplified for debugging)
+            const doc = new PDFDocument({ margin: 50 }); // bufferPages removed
             const stream = fs.createWriteStream(filepath);
+
+            console.log(`[PDF] Generating report: ${filepath}`);
 
             doc.pipe(stream);
 
@@ -37,6 +39,21 @@ export const generateQuizReportPDF = async (submissionData) => {
                 .fontSize(10)
                 .text('NavGurukul Assessment Platform', 200, 50, { align: 'right' })
                 .moveDown();
+
+            // ... (Content remains the same) ...
+
+            // --- Footer (Disabled for debugging) ---
+            // const range = doc.bufferedPageRange();
+            // for (let i = range.start; i < range.start + range.count; i++) {
+            //     doc.switchToPage(i);
+            //     doc.fontSize(8).fillColor('#888888');
+            //     doc.text(
+            //         `Page ${i + 1} of ${range.count}`,
+            //         50,
+            //         doc.page.height - 30,
+            //         { align: 'center', width: 500 }
+            //     );
+            // }
 
             // --- Quiz Info ---
             doc.strokeColor('#aaaaaa')
@@ -115,6 +132,8 @@ export const generateQuizReportPDF = async (submissionData) => {
             });
 
             // --- Footer (Page Numbers) ---
+            // --- Footer (Page Numbers) - Disabled ---
+            /*
             const range = doc.bufferedPageRange();
             for (let i = range.start; i < range.start + range.count; i++) {
                 doc.switchToPage(i);
@@ -126,6 +145,7 @@ export const generateQuizReportPDF = async (submissionData) => {
                     { align: 'center', width: 500 }
                 );
             }
+            */
 
             // Finalize PDF
             doc.end();
